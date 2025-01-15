@@ -80,3 +80,4 @@ p {
       text-align: center; /* Center the text inside the boxes */
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
   }
+  
