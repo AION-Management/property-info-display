@@ -1,7 +1,8 @@
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js";
+import { app } from "./firebaseConfig.js";
 
-const db = getDatabase();
-const state = "Delaware"; // This page is specific to Delaware
+const db = getDatabase(app);
+//const state = "Delaware"; // This page is specific to Delaware
 
 function populateDisplayPage() {
     const stateRef = ref(db, `properties/${state}`);
