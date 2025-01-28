@@ -7,6 +7,8 @@ import { getPropertyDataByState } from "./firebaseService.js";
 function populateDisplayPage(state) {
     // Fetch property data for the given state
     getPropertyDataByState(state, (properties) => {
+        console.log(`Fetched properties for state ${state}:`, properties);
+        
         if (!properties) {
             console.error(`No property data available for ${state}.`);
             return;
@@ -55,7 +57,7 @@ const mainElement = document.querySelector("main");
 const state = mainElement ? mainElement.getAttribute("data-state") : null;
 
 if (state) {
-    window.onload = populateDisplayPage(state);
+    populateDisplayPage(state);
 } else {
     console.error("State identifier not found in HTML.");
 }
