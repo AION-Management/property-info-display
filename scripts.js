@@ -24,11 +24,26 @@ function populateDisplayPage(state) {
                         // Update unit count as plain text
                         spanElement.textContent = details;
                     } else if (details.name && details.email) {
-                        // Update name with a mailto hyperlink
+                        // Create the hyperlink with the role's ID
+                        const linkId = id; // ID for the hyperlink (e.g., "westover-pointe-vp")
+                    
+                        // Update the element for the name
+                        const nameElement = document.getElementById(`${id}-name`);
+                        if (nameElement) {
+                            nameElement.textContent = details.name;
+                        }
+                    
+                        // Update the element for the email
+                        const emailElement = document.getElementById(`${id}-email`);
+                        if (emailElement) {
+                            emailElement.textContent = details.email;
+                        }
+                    
+                        // Add the hyperlink to the role's ID
                         spanElement.innerHTML = `
-                            <a href="mailto:${details.email}">${details.name}</a>
+                            <a id="${linkId}" href="mailto:${details.email}">${details.name}</a>
                         `;
-                    }
+                    }                    
                 }
             }
         }
