@@ -13,6 +13,7 @@ function populateDisplayPage(state) {
 
         for (const [propertyName, propertyDetails] of Object.entries(properties)) {
             for (const [role, details] of Object.entries(propertyDetails)) {
+                console.log(`Role: ${role}`);
                 const id = `${propertyName.toLowerCase().replace(/\s+/g, "-")}-${role}`;
                 console.log(`Looking for element with ID: ${id}`);
 
