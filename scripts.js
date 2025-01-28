@@ -52,12 +52,13 @@ function populateDisplayPage(state) {
     });
 }
 
-// Identify the state from the `data-state` attribute in the HTML
-const mainElement = document.querySelector("main");
-const state = mainElement ? mainElement.getAttribute("data-state") : null;
+document.addEventListener("DOMContentLoaded", () => {
+    const mainElement = document.querySelector("main");
+    const state = mainElement ? mainElement.getAttribute("data-state") : null;
 
-if (state) {
-    populateDisplayPage(state);
-} else {
-    console.error("State identifier not found in HTML.");
-}
+    if (state) {
+        populateDisplayPage(state);
+    } else {
+        console.error("State identifier not found in HTML.");
+    }
+});
