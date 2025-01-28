@@ -55,7 +55,7 @@ const mainElement = document.querySelector("main");
 const state = mainElement ? mainElement.getAttribute("data-state") : null;
 
 if (state) {
-    populateDisplayPage(state);
+    window.onload = populateDisplayPage(state);
 } else {
     console.error("State identifier not found in HTML.");
 }
