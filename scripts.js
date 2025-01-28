@@ -1,55 +1,36 @@
 import { getPropertyDataByState } from "./firebaseService.js";
 
 /**
- * Populate the display page dynamically based on the state
+ * Populate the placeholders in the existing HTML layout dynamically
  * @param {string} state - The state to fetch and display data for
  */
 function populateDisplayPage(state) {
-    const container = document.getElementById("container");
-
-    // Set a fallback if the container is missing
-    if (!container) {
-        console.error("Container element not found.");
-        return;
-    }
-
-    // Fetch property data for the state
+    // Fetch property data for the given state
     getPropertyDataByState(state, (properties) => {
         if (!properties) {
             console.error(`No property data available for ${state}.`);
-            container.innerHTML = `<p>No data available for ${state}.</p>`;
             return;
         }
 
-        container.innerHTML = ""; // Clear existing content
-
-        // Iterate through properties and build the HTML
+        // Iterate through properties and update placeholders
         for (const [propertyName, propertyDetails] of Object.entries(properties)) {
-            const propertyDiv = document.createElement("div");
-            propertyDiv.className = "property";
-
-            // Create property name
-            const propertyHeader = document.createElement("h2");
-            propertyHeader.textContent = propertyName;
-            propertyDiv.appendChild(propertyHeader);
-
-            // Add property details
             for (const [role, details] of Object.entries(propertyDetails)) {
-                const detailParagraph = document.createElement("p");
+                // Construct the ID based on the property and role
+                const id = `${propertyName.toLowerCase().replace(/\s+/g, "-")}-${role}`;
+                const spanElement = document.getElementById(id);
 
-                if (role === "unitCount") {
-                    detailParagraph.innerHTML = `<strong>${role.replace(/([A-Z])/g, " $1")}: </strong>${details}`;
-                } else if (details.name && details.email) {
-                    detailParagraph.innerHTML = `
-                        <strong>${role.replace(/([A-Z])/g, " $1")}: </strong>
-                        <a href="mailto:${details.email}">${details.name}</a>
-                    `;
+                if (spanElement) {
+                    if (role === "unitCount") {
+                        // Update unit count as plain text
+                        spanElement.textContent = details;
+                    } else if (details.name && details.email) {
+                        // Update name with a mailto hyperlink
+                        spanElement.innerHTML = `
+                            <a href="mailto:${details.email}">${details.name}</a>
+                        `;
+                    }
                 }
-
-                propertyDiv.appendChild(detailParagraph);
             }
-
-            container.appendChild(propertyDiv);
         }
     });
 }
