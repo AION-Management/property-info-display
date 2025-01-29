@@ -29,23 +29,23 @@ function populateDisplayPage(state) {
                     if (details !== null && details !== undefined && details !== "") {
                         spanElement.textContent = details;
                     }
-                } else if (details && details.name && details.email) {
+                } else if (details && (details.name || details.email)) {
                     const nameElement = document.getElementById(`${id}-name`);
                     const emailElement = document.getElementById(`${id}-email`);
 
-                    if (nameElement && details.name) {
+                    if (nameElement && details.name && details.name.trim() !== "") {
                         nameElement.textContent = details.name;
                     } else {
                         console.warn(`Name element with ID "${id}-name" not found.`);
                     }
 
-                    if (emailElement && details.email) {
+                    if (emailElement && details.email && details.email.trim() !== "") {
                         emailElement.textContent = details.email;
                     } else {
                         console.warn(`Email element with ID "${id}-email" not found.`);
                     }
-
-                    if (details.name && details.email) {
+                    // Only update the hyperlink if both name & email exist
+                    if (details.name && details.email && details.name.trim() !== "" && details.email.trim() !== "") {
                         spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
                     }
                     // Add the hyperlink to the role's ID
