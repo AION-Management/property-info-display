@@ -25,7 +25,7 @@ function populateDisplayPage(state) {
                     continue;
                 }
                 //console.log(`Details: ${details}`)
-                if (role === "unitCount") {
+                if (id.includes("unit")) {
                     if (details !== null && details !== undefined && details !== "") {
                         spanElement.textContent = details;
                     }
