@@ -44,7 +44,7 @@ function populateDisplayPage(state) {
                     }
 
                     // Add the hyperlink to the role's ID
-                    spanElement.innerHTML = `<a id="${linkId}" href="mailto:${details.email}">${details.name}</a>`;
+                    spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
                 }
             }
         }
