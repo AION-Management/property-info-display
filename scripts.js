@@ -24,8 +24,8 @@ function populateDisplayPage(state) {
                     console.warn(`Element with ID "${id}" not found.`);
                     continue;
                 }
-                console.log(`Details: ${details}`)
-                if (role === "unit") {
+                //console.log(`Details: ${details}`)
+                if (role === "unitCount") {
                     if (details !== null && details !== undefined && details !== "") {
                         spanElement.textContent = details;
                     }
