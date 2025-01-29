@@ -26,25 +26,30 @@ function populateDisplayPage(state) {
                 }
 
                 if (role === "unitCount") {
-                    spanElement.textContent = details;
-                } else if (details.name && details.email) {
+                    if (details !== null && details !== undefined && details !== "") {
+                        spanElement.textContent = details;
+                    }
+                } else if (details && details.name && details.email) {
                     const nameElement = document.getElementById(`${id}-name`);
                     const emailElement = document.getElementById(`${id}-email`);
 
-                    if (nameElement) {
+                    if (nameElement && details.name) {
                         nameElement.textContent = details.name;
                     } else {
                         console.warn(`Name element with ID "${id}-name" not found.`);
                     }
 
-                    if (emailElement) {
+                    if (emailElement && details.email) {
                         emailElement.textContent = details.email;
                     } else {
                         console.warn(`Email element with ID "${id}-email" not found.`);
                     }
 
+                    if (details.name && details.email) {
+                        spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
+                    }
                     // Add the hyperlink to the role's ID
-                    spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
+                    //spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
                 }
             }
         }
