@@ -104,12 +104,14 @@ h2 {
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
     font-weight: 600;
+    text-align: center;
 }
 
 p {
     font-size: 0.95rem;
     margin-bottom: 0.75rem;
     color: #cbd5e1;
+    text-align: center;
 }
 
 p strong {
