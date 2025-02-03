@@ -7,7 +7,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <div class="hamburger-menu">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    
+    <header class="page-header">
+        <h1>Ohio Properties</h1>
+    </header>
+
+    <aside class="sidebar">
         <nav class="nav-buttons">
             <ul>
                 <li><a href="index.html">All Properties</a></li>
@@ -20,7 +30,7 @@
                 <li><a href="virginia.html">Virginia</a></li>
             </ul>
         </nav>
-    </header>
+    </aside>
     <main data-state="Ohio">
         <div id="container">
             <div>
@@ -63,7 +73,16 @@
             </div>
         </div>
     </main>
-
+    <script>
+        const hamburger = document.querySelector('.hamburger-menu');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+ 
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    </script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script type="module" src="firebaseConfig.js"></script>
