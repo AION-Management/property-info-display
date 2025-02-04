@@ -143,6 +143,14 @@ main {
     align-items: start;
 }
 
+/* Single column layout */
+#container div:not(.two-columns):not(.three-columns) {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+    grid-auto-rows: min-content;
+    align-content: start;
+}
+
 #container div.two-columns {
     grid-template-columns: repeat(2, 1fr);  /* Two equal columns */
     gap: 0.2rem;
