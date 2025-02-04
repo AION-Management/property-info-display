@@ -137,6 +137,18 @@
             sidebar.classList.toggle('active');
             hamburger.classList.toggle('active');
         });
+         // Add column classes to divs based on number of properties
+        document.addEventListener('DOMContentLoaded', function() {
+            const propertyDivs = document.querySelectorAll('#container > div');
+            propertyDivs.forEach(div => {
+                const propertyCount = div.querySelectorAll('p').length;
+                if (propertyCount > 8) {
+                    div.classList.add('three-columns');
+                } else if (propertyCount > 5) {
+                    div.classList.add('two-columns');
+                }
+            });
+        });
     </script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
