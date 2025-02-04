@@ -240,14 +240,14 @@ p strong {
 }
 
 /* Style for regular links within content */
-a {
+#container div p a.property-link {
     color: #ffffff;
     text-decoration: none;
     transition: all 0.2s ease;
     border-bottom: 1px solid transparent;
 }
 
-a:hover {
+#container div p a.property-link:hover {
     color: #F08A20;
     border-bottom: 1px solid #F08A20;
 }
