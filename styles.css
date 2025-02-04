@@ -182,6 +182,18 @@ main {
     justify-content: center;
 }
 
+#container div p a {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: #F08A20;
+    text-align: center;
+}
+
+#container div p a:hover {
+    color: #cbd5e1;
+    border-bottom: 1px solid #cbd5e1;
+}
+
 /* Adjust media query for mobile */
 @media (max-width: 768px) {
     #container div.two-columns,
@@ -220,6 +232,12 @@ p strong {
     font-weight: 600;
 }
 
+.sharepoint {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: #F08A20;
+    text-align: center;
+}
 
 /* Style for regular links within content */
 a {
