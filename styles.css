@@ -19,6 +19,18 @@ body {
     margin: 0;
 }
 
+.page-header a {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: #F08A20;
+    text-align: center;
+}
+
+.page-header a:hover {
+    color: #cbd5e1;
+    /* border-bottom: 1px solid #cbd5e1; */
+}
+
 /* Hamburger Menu Styles */
 .hamburger-menu {
     position: fixed;
