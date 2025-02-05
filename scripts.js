@@ -46,7 +46,7 @@ function populateDisplayPage(state) {
                     }
                     // Only update the hyperlink if both name & email exist
                     if (details.name && details.email && details.name.trim() !== "" && details.email.trim() !== "") {
-                        spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
+                        spanElement.innerHTML = `<a class="link" id="${id}" href="mailto:${details.email}">${details.name}</a>`;
                     }
                     // Add the hyperlink to the role's ID
                     //spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
