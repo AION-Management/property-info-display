@@ -1,5 +1,8 @@
 # Property Information Display - Redesign
 
+![Screenshot](Screenshot1.png)
+![Screenshot](Screenshot2.png)
+
 ## Overview
 
 This redesign transforms the original property information display from a static, multi-page HTML application into a modern, single-page React application with improved user experience and maintainability.
