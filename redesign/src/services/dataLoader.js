@@ -31,31 +31,29 @@ import { savePropertyData } from './propertyService';
  * @returns {object} Standardized property data object
  */
 const extractPropertyDataFromHtml = (propertyElement, state) => {
-  // Extract property name from title element
   const titleElement = propertyElement.querySelector('h2 span');
   const propertyName = titleElement ? titleElement.textContent.trim() : 'Unknown Property';
   
-  // Extract address information
+  // Get address
   const addressElement = propertyElement.querySelector('p:nth-child(2) span');
   const address = addressElement ? addressElement.textContent.trim() : '';
   
-  // Extract unit count information
+  // Get unit count
   const unitElement = propertyElement.querySelector('[id$="-unit"]');
   const units = unitElement ? unitElement.textContent.trim() : '';
   
-  // Extract staff contact information using ID-based selectors
-  const vpElement = propertyElement.querySelector('[id$="-vp"]');    // Vice President
-  const remElement = propertyElement.querySelector('[id$="-rem"]');  // Regional Manager
-  const rsdElement = propertyElement.querySelector('[id$="-rsd"]');  // Regional Service Director
-  const dsElement = propertyElement.querySelector('[id$="-ds"]');    // District Supervisor
-  const pmElement = propertyElement.querySelector('[id$="-pm"]');    // Property Manager
+  // Get the different roles
+  const vpElement = propertyElement.querySelector('[id$="-vp"]');
+  const remElement = propertyElement.querySelector('[id$="-rem"]');
+  const rsdElement = propertyElement.querySelector('[id$="-rsd"]');
+  const dsElement = propertyElement.querySelector('[id$="-ds"]');
+  const pmElement = propertyElement.querySelector('[id$="-pm"]');
   
-  // Create standardized property data object
+  // Create object for this property
   const propertyData = {
     name: propertyName,
     address: address,
     unit: units,
-    // Staff roles with extracted contact information
     vp: extractContactInfo(vpElement),
     rem: extractContactInfo(remElement),
     rsd: extractContactInfo(rsdElement),
@@ -80,14 +78,13 @@ const extractPropertyDataFromHtml = (propertyElement, state) => {
 const extractContactInfo = (element) => {
   if (!element) return null;
   
-  // Check if element contains an email link
+  // Check if it's a direct text or an anchor link
   if (element.querySelector('a')) {
     const linkElement = element.querySelector('a');
     const name = linkElement.textContent.trim();
     const email = linkElement.getAttribute('href').replace('mailto:', '');
     return { name, email };
   } else {
-    // Handle plain text content
     const text = element.textContent.trim();
     return text ? { name: text } : null;
   }
@@ -109,42 +106,38 @@ const extractContactInfo = (element) => {
  */
 export const loadPropertiesFromHtml = async () => {
   try {
-    // List of states with property data to migrate
+    // Get all state pages
     const states = ['Delaware', 'Indiana', 'Maryland', 'New Jersey', 'Ohio', 'Pennsylvania', 'Virginia'];
     
-    // Process each state's property data
     for (const state of states) {
-      console.log(`Processing properties for ${state}...`);
+      // In a real scenario, we would fetch the HTML page for each state
+      // For this example, we'll use a manual approach
       
-      // Construct HTML file path (assumes static HTML files exist)
       const stateId = state.toLowerCase();
       const response = await fetch(`/${stateId}.html`);
       const html = await response.text();
       
-      // Parse HTML content using DOM parser
+      // Create a DOM parser
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       
-      // Extract property elements using container selector
+      // Get all property elements
       const propertyElements = doc.querySelectorAll('#container > div');
       
-      // Process each property element
       for (const propertyElement of propertyElements) {
         const propertyData = extractPropertyDataFromHtml(propertyElement, state);
-        
-        // Generate property ID from name (URL-friendly format)
         const propertyId = propertyData.name.toLowerCase().replace(/\s+/g, '-');
         
-        // Save extracted data to Firebase
+        // Save to Firebase
         await savePropertyData(state, propertyId, propertyData);
       }
       
-      console.log(`Successfully loaded properties for ${state}`);
+      console.log(`Loaded properties for ${state}`);
     }
     
     return true;
   } catch (error) {
-    console.error('Error loading property data from HTML:', error);
+    console.error('Error loading property data:', error);
     throw error;
   }
 };
@@ -164,7 +157,7 @@ export const loadPropertiesFromHtml = async () => {
  * @returns {Promise<boolean>} Success indicator
  */
 export const initializeTestData = async () => {
-  // Comprehensive test data set with realistic property information
+  // Test data for multiple states
   const testData = {
     'Delaware': {
       'westover-pointe': {
@@ -284,18 +277,12 @@ export const initializeTestData = async () => {
   
   try {
     console.log("Starting test data initialization...");
-    
-    // Iterate through all states and properties in test data
     for (const [state, properties] of Object.entries(testData)) {
-      console.log(`Initializing properties for ${state}...`);
-      
-      // Save each property to Firebase
       for (const [propertyId, propertyData] of Object.entries(properties)) {
         console.log(`Saving property: ${propertyId} in ${state}`);
         await savePropertyData(state, propertyId, propertyData);
       }
     }
-    
     console.log('Test data initialized successfully');
     return true;
   } catch (error) {
@@ -304,6 +291,5 @@ export const initializeTestData = async () => {
   }
 };
 
-// Optional: Direct execution for manual data initialization
-// Uncomment the line below to run data initialization directly
-// initializeTestData().then(() => console.log('Test data initialization complete!')); 
+// Call this function to initialize test data
+// initializeTestData().then(() => console.log('Done!')); 

@@ -1,141 +1,145 @@
 /**
- * Admin Page Component - Data Management Interface
+ * Admin Dashboard Page - Administrative Interface for Property Data Management
  * 
- * This component provides administrative tools for managing the Property Info Display system:
- * - Data initialization and management tools
- * - Firebase configuration display for troubleshooting
- * - System status monitoring
- * - Quick access to data management operations
+ * This page provides administrative tools for managing the application's data and settings.
+ * It serves as a central hub for system administration tasks.
  * 
  * Key Features:
- * - Data management through DataInitializer component
- * - Firebase configuration display for debugging
- * - Responsive layout with proper spacing
- * - Integration with Firebase services
+ * - Data initialization and management tools
+ * - Test data loading for development/demo purposes
+ * - Firebase configuration display and status
+ * - Visual feedback with status icons and messages
+ * - Loading state management for async operations
  * 
- * Security Note:
- * In a production environment, this page should be protected with
- * authentication and authorization to prevent unauthorized access.
+ * Use Cases:
+ * - Initial application setup
+ * - Restoring demo/test data
+ * - System configuration verification
+ * - Data management during development
  */
 
-import React from 'react';
-import DataInitializer from '../components/DataInitializer';
+import React, { useState } from 'react';
+import { initializeTestData } from '../services/dataLoader';
 import '../styles/Admin.css';
 
 function Admin() {
+  // Loading state to prevent multiple simultaneous operations
+  const [loading, setLoading] = useState(false);
+  
+  // Status state for user feedback (info, success, error)
+  const [status, setStatus] = useState(null);
+  
+  /**
+   * Handles test data initialization
+   * - Prevents multiple simultaneous operations
+   * - Provides real-time status updates
+   * - Calls the dataLoader service to populate Firebase
+   */
+  const handleInitializeData = async () => {
+    if (loading) return; // Prevent concurrent operations
+    
+    try {
+      setLoading(true);
+      setStatus({ type: 'info', message: 'Initializing test data...' });
+      
+      // Call the data loader service to populate Firebase with test data
+      await initializeTestData();
+      
+      setStatus({ 
+        type: 'success', 
+        message: 'Test data loaded successfully! You can now view properties from the navigation menu.' 
+      });
+    } catch (error) {
+      console.error('Error initializing data:', error);
+      setStatus({ 
+        type: 'error', 
+        message: 'Failed to load test data. See console for details.' 
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <div className="admin-container">
-      {/* Page Header */}
-      <div className="admin-header">
-        <h1>Administration</h1>
-        <p className="admin-description">
-          Manage property data and system configuration. 
-          Use the tools below to initialize test data or troubleshoot system issues.
-        </p>
-      </div>
+      <h1 className="admin-title">Admin Dashboard</h1>
+      <p className="admin-description">
+        This page provides administrative tools to manage the application data and settings.
+      </p>
       
-      {/* Main Content Area */}
-      <div className="admin-content">
-        {/* 
-          Data Management Section
-          Uses the DataInitializer component for Firebase data operations
-        */}
+      <div className="admin-sections">
+        {/* Quick Actions Section - Primary administrative tools */}
         <section className="admin-section">
-          <DataInitializer />
-        </section>
-        
-        {/* 
-          System Information Section
-          Displays Firebase configuration and connection status
-        */}
-        <section className="admin-section">
-          <div className="system-info">
-            <h2>System Information</h2>
-            <p>Current system configuration and status information.</p>
-            
-            {/* Firebase Configuration Display */}
-            <div className="config-section">
-              <h3>Firebase Configuration</h3>
-              <div className="config-details">
-                <div className="config-item">
-                  <label>Project ID:</label>
-                  <span>property-info-1900</span>
-                </div>
-                <div className="config-item">
-                  <label>Database URL:</label>
-                  <span>https://property-info-1900-default-rtdb.firebaseio.com</span>
-                </div>
-                <div className="config-item">
-                  <label>Auth Domain:</label>
-                  <span>property-info-1900.firebaseapp.com</span>
-                </div>
-                <div className="config-item">
-                  <label>Status:</label>
-                  <span className="status-connected">Connected</span>
-                </div>
-              </div>
+          <h2 className="section-title">Quick Actions</h2>
+          
+          <div className="admin-card">
+            <div className="card-header">
+              <h3>Load Test Data</h3>
+              <p>Initialize Firebase with sample property data for testing.</p>
             </div>
             
-            {/* Application Information */}
-            <div className="config-section">
-              <h3>Application Information</h3>
-              <div className="config-details">
-                <div className="config-item">
-                  <label>Version:</label>
-                  <span>1.0.0 (Redesign POC)</span>
-                </div>
-                <div className="config-item">
-                  <label>Environment:</label>
-                  <span>{process.env.NODE_ENV || 'development'}</span>
-                </div>
-                <div className="config-item">
-                  <label>Build Date:</label>
-                  <span>{new Date().toLocaleDateString()}</span>
-                </div>
-              </div>
+            {/* Action button with loading state */}
+            <div className="card-actions">
+              <button 
+                className={`admin-button primary ${loading ? 'loading' : ''}`}
+                onClick={handleInitializeData}
+                disabled={loading} // Prevent clicks during operation
+              >
+                {loading ? 'Loading...' : 'Initialize Test Data'}
+              </button>
             </div>
+            
+            {/* Status message display with icons for different states */}
+            {status && (
+              <div className={`status-message ${status.type}`}>
+                <div className="status-icon">
+                  {/* Success checkmark icon */}
+                  {status.type === 'success' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                  )}
+                  {/* Error exclamation icon */}
+                  {status.type === 'error' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="12"></line>
+                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                  )}
+                  {/* Info information icon */}
+                  {status.type === 'info' && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                  )}
+                </div>
+                <p>{status.message}</p>
+              </div>
+            )}
           </div>
         </section>
         
-        {/* 
-          Quick Actions Section
-          Additional administrative tools and shortcuts
-        */}
+        {/* Firebase Configuration Section - Display connection info */}
         <section className="admin-section">
-          <div className="quick-actions">
-            <h2>Quick Actions</h2>
-            <p>Common administrative tasks and navigation shortcuts.</p>
+          <h2 className="section-title">Firebase Configuration</h2>
+          <div className="admin-card">
+            <p>The application is currently connected to the Firebase project:</p>
+            <code className="config-code">property-info-1900</code>
             
-            <div className="actions-grid">
-              {/* Action buttons for common tasks */}
-              <button 
-                className="action-button"
-                onClick={() => window.open('https://console.firebase.google.com/project/property-info-1900', '_blank')}
-              >
-                <span className="action-icon">🔧</span>
-                <span className="action-text">Firebase Console</span>
-              </button>
-              
-              <button 
-                className="action-button"
-                onClick={() => window.location.href = '/'}
-              >
-                <span className="action-icon">🏠</span>
-                <span className="action-text">View Properties</span>
-              </button>
-              
-              <button 
-                className="action-button"
-                onClick={() => {
-                  const confirmed = window.confirm('Are you sure you want to reload the page? Any unsaved changes will be lost.');
-                  if (confirmed) {
-                    window.location.reload();
-                  }
-                }}
-              >
-                <span className="action-icon">🔄</span>
-                <span className="action-text">Refresh System</span>
-              </button>
+            {/* Configuration details display */}
+            <div className="config-details">
+              <div className="config-item">
+                <span className="config-label">Project ID:</span>
+                <span className="config-value">property-info-1900</span>
+              </div>
+              <div className="config-item">
+                <span className="config-label">Database URL:</span>
+                <span className="config-value">https://property-info-1900-default-rtdb.firebaseio.com</span>
+              </div>
             </div>
           </div>
         </section>

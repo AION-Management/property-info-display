@@ -1,7 +1,8 @@
 # Property Information Display - Redesign
 
-![Screenshot](Screenshot1.png)
-![Screenshot](Screenshot2.png)
+![Screenshot of the Property Information Display](./public/Screenshot1.png)
+![Screenshot](./public/Screenshot2.png)
+
 
 ## Overview
 

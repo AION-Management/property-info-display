@@ -1,23 +1,18 @@
 /**
- * Home Page Component - Property Info Display Landing Page
+ * Home Page Component - Landing Page for Property Info Display
  * 
- * This component serves as the application's main landing page and provides:
- * - Overview of all properties organized by state
- * - Quick navigation to specific properties or states
- * - Error handling for data loading failures
- * - Loading states with proper user feedback
+ * This component serves as the main landing page and displays:
+ * - All properties grouped by state
+ * - Grid layout for easy browsing
+ * - Loading states and error handling
+ * - Navigation links to individual property detail pages
  * 
- * Data Flow:
- * 1. Loads all property data on component mount
- * 2. Organizes properties by state for easy browsing
- * 3. Provides direct links to individual property details
- * 4. Handles edge cases (empty data, loading errors)
- * 
- * Layout Structure:
- * - Header with welcome message and overview
- * - State sections with property cards
- * - Responsive grid layout for property listings
- * - Error and loading state UI feedback
+ * Key Features:
+ * - Fetches all property data on component mount
+ * - Handles loading, error, and empty states gracefully
+ * - Organizes properties by state with visual grouping
+ * - Responsive grid layout for property cards
+ * - Direct navigation to property details via React Router Links
  */
 
 import React, { useState, useEffect } from 'react';
@@ -26,160 +21,101 @@ import { getAllProperties } from '../services/propertyService';
 import '../styles/Home.css';
 
 function Home() {
-  // State management for component data and UI states
-  const [properties, setProperties] = useState({}); // Object organized by state
-  const [loading, setLoading] = useState(true);     // Loading indicator
-  const [error, setError] = useState(null);         // Error message storage
+  // Loading state for initial data fetch
+  const [loading, setLoading] = useState(true);
   
-  /**
-   * Load Property Data on Component Mount
-   * 
-   * Fetches all property data from Firebase and organizes it by state.
-   * Implements proper error handling and loading state management.
-   */
+  // Property data organized by state -> properties structure
+  const [propertyData, setPropertyData] = useState({});
+  
+  // Error state for fetch failures
+  const [error, setError] = useState(null);
+
+  // Fetch all properties when component mounts
   useEffect(() => {
-    const loadProperties = async () => {
+    const fetchProperties = async () => {
       try {
         setLoading(true);
-        setError(null);
-        
-        // Fetch all properties from the property service
-        const propertiesData = await getAllProperties();
-        
-        console.log('Loaded properties data:', propertiesData);
-        setProperties(propertiesData);
+        // Get all properties from Firebase via the property service
+        const data = await getAllProperties();
+        setPropertyData(data || {}); // Ensure we have a fallback object
+        setLoading(false);
       } catch (err) {
-        console.error('Error loading properties:', err);
-        setError('Failed to load property data. Please try refreshing the page.');
-      } finally {
+        console.error('Error fetching properties:', err);
+        setError('Failed to load properties. Please try again later.');
         setLoading(false);
       }
     };
-    
-    loadProperties();
-  }, []); // Empty dependency array = run once on mount
-  
-  /**
-   * Format State Name for Display
-   * 
-   * Converts database state IDs to user-friendly display names.
-   * Handles special cases like "newjersey" → "New Jersey"
-   * 
-   * @param {string} stateId - The state identifier from database
-   * @returns {string} Formatted display name
-   */
-  const formatStateName = (stateId) => {
-    // Handle special case for New Jersey
-    if (stateId === 'newjersey') return 'New Jersey';
-    
-    // Convert camelCase/lowercase to Title Case
-    return stateId.charAt(0).toUpperCase() + stateId.slice(1);
-  };
-  
-  // Loading State UI
+
+    fetchProperties();
+  }, []); // Empty dependency array - only run on mount
+
+  // Loading state UI - displays spinner and loading message
   if (loading) {
     return (
-      <div className="home-container">
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-          <p>Loading property information...</p>
-        </div>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading properties...</p>
       </div>
     );
   }
-  
-  // Error State UI
+
+  // Error state UI - displays error message with retry option
   if (error) {
     return (
-      <div className="home-container">
-        <div className="error-state">
-          <h2>Unable to Load Properties</h2>
-          <p>{error}</p>
-          <button 
-            className="retry-button" 
-            onClick={() => window.location.reload()}
-          >
-            Try Again
-          </button>
-        </div>
+      <div className="error-container">
+        <h2>Error</h2>
+        <p>{error}</p>
+        <button 
+          className="primary-button" 
+          onClick={() => window.location.reload()} // Simple retry via page reload
+        >
+          Try Again
+        </button>
       </div>
     );
   }
-  
-  // Main Content Render
+
+  // Empty state UI - when no properties are available
+  if (Object.keys(propertyData).length === 0) {
+    return (
+      <div className="empty-container">
+        <h1 className="home-title">All Properties</h1>
+        <p>No properties found. Check back later.</p>
+      </div>
+    );
+  }
+
+  // Main content rendering - property data organized by state
   return (
     <div className="home-container">
-      {/* Page Header with Welcome Information */}
-      <div className="home-header">
-        <h1>Property Information</h1>
-        <p className="home-description">
-          Browse our portfolio of properties across multiple states. 
-          Click on any property to view detailed information including 
-          contact details, amenities, and staff information.
-        </p>
-      </div>
+      <h1 className="home-title">All Properties</h1>
       
-      {/* Properties organized by state */}
-      <div className="properties-by-state">
-        {/* Check if we have any property data */}
-        {Object.keys(properties).length === 0 ? (
-          <div className="empty-state">
-            <h2>No Properties Available</h2>
-            <p>No property data is currently available. Please check back later or contact an administrator.</p>
-            <Link to="/admin" className="admin-link">
-              Initialize Data
-            </Link>
-          </div>
-        ) : (
-          /* Render each state section with its properties */
-          Object.entries(properties).map(([stateId, stateProperties]) => (
-            <div key={stateId} className="state-section">
-              {/* State header with navigation link */}
-              <div className="state-header">
-                <h2>
-                  <Link 
-                    to={`/state/${stateId}`} 
-                    className="state-title-link"
-                  >
-                    {formatStateName(stateId)}
-                  </Link>
-                </h2>
-                <p className="property-count">
-                  {Object.keys(stateProperties).length} properties
-                </p>
-              </div>
-              
-              {/* Grid of property cards for this state */}
-              <div className="properties-grid">
-                {Object.entries(stateProperties).map(([propertyId, property]) => (
-                  <Link 
-                    key={propertyId}
-                    to={`/property/${stateId}/${propertyId}`}
-                    className="property-card"
-                  >
-                    {/* Property card content */}
-                    <div className="property-card-content">
-                      <h3 className="property-name">{property.name}</h3>
-                      <p className="property-address">{property.address}</p>
-                      {/* Additional property details */}
-                      <div className="property-details">
-                        {property.units && (
-                          <span className="property-units">{property.units} units</span>
-                        )}
-                        {property.contact.manager && (
-                          <span className="property-manager">Manager: {property.contact.manager}</span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Visual indicator for card interaction */}
-                    <div className="property-card-arrow">→</div>
-                  </Link>
-                ))}
-              </div>
+      {/* State sections - each state gets its own section */}
+      <div className="state-sections">
+        {Object.entries(propertyData).map(([stateId, properties]) => (
+          <div key={stateId} className="state-section">
+            {/* State header with capitalized state name */}
+            <h2 className="state-title">{stateId.charAt(0).toUpperCase() + stateId.slice(1)}</h2>
+            
+            {/* Property grid - responsive layout for property cards */}
+            <div className="property-grid">
+              {Object.entries(properties).map(([propertyId, property]) => (
+                <Link 
+                  to={`/property/${stateId}/${propertyId}`} 
+                  key={propertyId}
+                  className="property-card"
+                >
+                  <div className="property-card-content">
+                    {/* Property name display */}
+                    <h3 className="property-name">{property.name}</h3>
+                    {/* Visual indicator for navigation */}
+                    <span className="property-arrow">→</span>
+                  </div>
+                </Link>
+              ))}
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );
