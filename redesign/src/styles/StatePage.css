@@ -1,0 +1,117 @@
+.state-container {
+  padding: 1rem 0;
+}
+
+.state-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  color: var(--orange);
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-right: 1rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: #d97600;
+}
+
+.state-page-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--dark-gray);
+}
+
+.state-property-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.state-property-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.state-property-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: rgba(247, 140, 12, 0.3);
+}
+
+.state-property-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.property-icon {
+  background-color: var(--orange-light);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange);
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.state-property-content {
+  flex: 1;
+}
+
+.state-property-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+  color: var(--dark-gray);
+}
+
+.view-details {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.chevron {
+  color: #999;
+  margin-left: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.state-property-card:hover .chevron {
+  transform: translateX(3px);
+  color: var(--orange);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .state-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .state-page-title {
+    font-size: 1.8rem;
+  }
+  
+  .back-button {
+    margin-bottom: 0.5rem;
+  }
+} 

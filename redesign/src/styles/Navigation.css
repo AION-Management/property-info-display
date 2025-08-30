@@ -1,0 +1,121 @@
+.navigation {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+}
+
+.navigation-mobile-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background-color: var(--orange);
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.navigation-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.nav-link {
+  color: var(--gray);
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link:hover {
+  background-color: var(--orange-light);
+  color: var(--orange);
+}
+
+.nav-link.active {
+  background-color: var(--orange-light);
+  color: var(--orange);
+  font-weight: 500;
+}
+
+.nav-divider {
+  height: 1px;
+  background-color: var(--border);
+  margin: 0.75rem 0;
+}
+
+.nav-link.admin {
+  margin-top: 0.25rem;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-link.admin.active {
+  background-color: var(--orange-light);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .navigation-mobile-toggle {
+    display: block;
+  }
+  
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+  }
+  
+  .hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+  }
+  
+  .hamburger.open span:nth-child(1) {
+    transform: translateY(8.5px) rotate(45deg);
+  }
+  
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger.open span:nth-child(3) {
+    transform: translateY(-8.5px) rotate(-45deg);
+  }
+  
+  .navigation-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    padding: 5rem 1.5rem 2rem;
+    z-index: 999;
+    overflow-y: auto;
+  }
+  
+  .navigation-menu.open {
+    display: flex;
+  }
+  
+  .nav-link {
+    padding: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+} 
