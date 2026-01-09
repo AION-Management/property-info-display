@@ -13,43 +13,49 @@ function populateDisplayPage(state) {
 
         for (const [propertyName, propertyDetails] of Object.entries(properties)) {
             for (const [role, details] of Object.entries(propertyDetails)) {
-                //console.log(`Role: ${role}`);
-                //const id = `${propertyName.toLowerCase().replace(/\s+/g, "-")}-${role}`;
-                const id = `${role}`;
-                console.log(`Looking for element with ID: ${id}`);
+                const roleId = `${role}`;
+                const candidateIds = [
+                    roleId,
+                    `${roleId}-name`,
+                    `${roleId}-accountant-name`,
+                    `${roleId}-email`
+                ];
 
-                const spanElement = document.getElementById(id);
+                let spanElement = null;
+                let foundId = null;
+                for (const cand of candidateIds) {
+                    const el = document.getElementById(cand);
+                    if (el) { spanElement = el; foundId = cand; break; }
+                }
 
                 if (!spanElement) {
-                    console.warn(`Element with ID "${id}" not found.`);
+                    console.warn(`Element for role "${role}" not found (tried: ${candidateIds.join(', ')}).`);
                     continue;
                 }
-                //console.log(`Details: ${details}`)
-                if (id.includes("unit")) {
+
+                // Handle unit counts or numeric values
+                if ((foundId && foundId.includes("unit")) || typeof details === 'number') {
                     if (details !== null && details !== undefined && details !== "") {
                         spanElement.textContent = details;
                     }
-                } else if (details && (details.name || details.email)) {
-                    const nameElement = document.getElementById(`${id}-name`);
-                    const emailElement = document.getElementById(`${id}-email`);
+                    continue;
+                }
 
-                    if (nameElement && details.name && details.name.trim() !== "") {
-                        nameElement.textContent = details.name;
-                    } else {
-                        console.warn(`Name element with ID "${id}-name" not found.`);
-                    }
+                // If details is a simple string, just set it
+                if (typeof details === 'string') {
+                    spanElement.textContent = details;
+                    continue;
+                }
 
-                    if (emailElement && details.email && details.email.trim() !== "") {
-                        emailElement.textContent = details.email;
-                    } else {
-                        console.warn(`Email element with ID "${id}-email" not found.`);
+                // If details is an object with name/email, prefer creating a mailto link
+                if (details && (details.name || details.email)) {
+                    if (details.name && details.email) {
+                        spanElement.innerHTML = `<a class="link" href="mailto:${details.email}">${details.name}</a>`;
+                    } else if (details.name) {
+                        spanElement.textContent = details.name;
+                    } else if (details.email) {
+                        spanElement.textContent = details.email;
                     }
-                    // Only update the hyperlink if both name & email exist
-                    if (details.name && details.email && details.name.trim() !== "" && details.email.trim() !== "") {
-                        spanElement.innerHTML = `<a class="link" id="${id}" href="mailto:${details.email}">${details.name}</a>`;
-                    }
-                    // Add the hyperlink to the role's ID
-                    //spanElement.innerHTML = `<a id="${id}" href="mailto:${details.email}">${details.name}</a>`;
                 }
             }
         }
